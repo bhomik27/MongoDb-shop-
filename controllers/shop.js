@@ -73,15 +73,44 @@ exports.postCart = (req, res, next) => {
     )
 };
 
+// exports.postCartDeleteProduct = (req, res, next) => {
+//   const prodId = req.body.productId;
+//   req.user
+//     .removeFromCart(prodId)
+//     .then(result => {
+//       // console.log(result);
+//       // res.redirect('/cart');
+//     })
+//     .catch(err =>
+//       console.log(err));
+// };
+
+
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
+  
+  // Log the received productId for debugging
+  console.log(`Attempting to delete product with ID: ${prodId}`);
+  
   req.user
-    .deleteItemFromCart(prodId)
+    .removeFromCart(prodId)
     .then(result => {
+      // Log result after deletion for debugging
+      console.log(`Product with ID ${prodId} removed successfully.`);
+      console.log('Result:', result);
+      // Redirect to the cart page after successful deletion
       res.redirect('/cart');
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      // Log detailed error message
+      console.error(`Error removing product with ID ${prodId}:`, err);
+      // Optionally, redirect to an error page or show an error message
+      res.redirect('/cart');  // Redirect to cart to handle errors gracefully
+    });
 };
+
+
+
 
 exports.postOrder = (req, res, next) => {
   req.user
